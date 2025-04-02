@@ -29,7 +29,7 @@ class MyApp(QMainWindow):
             else:
                 print("Error while calling API")
         except requests.exceptions.RequestException as e:
-            print("Error: %s" % str(e))
+            print(f"Error: {e}")
 
     def call_api_decrypt(self):
         url = "http://127.0.0.1:5000/api/caesar/decrypt"
@@ -37,7 +37,8 @@ class MyApp(QMainWindow):
             "cipher_text": self.ui.txt_cipher_text.toPlainText(),
             "key": self.ui.txt_key.toPlainText()
         }
-        try:  # Sửa lỗi thụt lề
+
+        try:
             response = requests.post(url, json=payload)
             if response.status_code == 200:
                 data = response.json()
@@ -49,8 +50,9 @@ class MyApp(QMainWindow):
             else:
                 print("Error while calling API")
         except requests.exceptions.RequestException as e:
-            print("Error: %s" % str(e))
+            print(f"Error: {e}")
 
+# Khối này đã được di chuyển ra ngoài class MyApp
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MyApp()

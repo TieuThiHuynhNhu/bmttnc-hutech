@@ -49,7 +49,7 @@ def rsa_sign_message():
     message = data['message']
     private_key, _ = rsa_cipher.load_keys()
     signature_hex = rsa_cipher.sign(message, private_key)
-    signature_hex = signature.hex()
+    signature_hex = signature_hex.hex()
     return jsonify({'signature': signature_hex})
 
 @app.route('/api/rsa/verify', methods=['POST'])

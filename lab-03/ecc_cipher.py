@@ -58,13 +58,13 @@ class MyApp(QMainWindow):
                 data = response.json()
                 if (data["is_verified"]):
                     msg = QMessageBox()
-                    msg.setIon(QMessageBox.Information)
+                    msg.setIcon(QMessageBox.Information)
                     msg.setText("Verified Successfully")
                     msg.exec_()
                 else:
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Information)
-                    msg.setText("Verified Successfully")
+                    msg.setText("Verified Fail")
                     msg.exec_()
             else:
                 print("Error while calling API")

@@ -1,6 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
-from ui.vigenere import Ui_MainWindow
+from ui.virgenere import Ui_MainWindow
 import requests
 
 class MyApp(QMainWindow):
@@ -21,47 +21,38 @@ class MyApp(QMainWindow):
             response = requests.post(url, json=payload)
             if response.status_code == 200:
                 data = response.json()
-                self.ui.txt_cipher_text.setPlainText(data.get("encrypted_text", ""))
+                self.ui.txt_cipher_text.setPlainText(data["encrypted_text"])
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Information)
                 msg.setText("Encrypted Successfully")
                 msg.exec_()
             else:
-                print(f"Error: {response.status_code} - {response.text}")
+                print("Error while calling API")
         except requests.exceptions.RequestException as e:
-            print("Error: %s" % str(e))
+            print(f"Error: {e}")
 
     def call_api_decrypt(self):
         url = "http://127.0.0.1:5000/api/vigenere/decrypt"
-        cipher_text = self.ui.txt_cipher_text.toPlainText()
-        key = self.ui.txt_key.toPlainText()
-        
-        print(f"Cipher Text: {cipher_text}")  # In ra cipher_text
-        print(f"Key: {key}")  # In ra key
-
         payload = {
-            "cipher_text": cipher_text,
-            "key": key
+            "cipher_text": self.ui.txt_cipher_text.toPlainText(),
+            "key": self.ui.txt_key.toPlainText()
         }
+
         try:
             response = requests.post(url, json=payload)
             if response.status_code == 200:
                 data = response.json()
-                print(data)  # In ra phản hồi để kiểm tra
-                decrypted_text = data.get("decrypted_text", "")
-                if decrypted_text:  # Kiểm tra nếu có dữ liệu
-                    self.ui.txt_plain_text.setPlainText(decrypted_text)
-                    msg = QMessageBox()
-                    msg.setIcon(QMessageBox.Information)
-                    msg.setText("Decrypted Successfully")
-                    msg.exec_()
-                else:
-                    print("Decrypted text is empty.")
+                self.ui.txt_plain_text.setPlainText(data["decrypted_text"])
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Information)
+                msg.setText("Decrypted Successfully")
+                msg.exec_()
             else:
-                print(f"Error: {response.status_code} - {response.text}")
+                print("Error while calling API")
         except requests.exceptions.RequestException as e:
-            print("Error: %s" % str(e))
+            print(f"Error: {e}")
 
+# Khối này đã được di chuyển ra ngoài class MyApp
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MyApp()
